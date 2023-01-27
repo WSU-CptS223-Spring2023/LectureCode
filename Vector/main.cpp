@@ -32,6 +32,16 @@ void readCSV(string filename, vector<State> &svector)
 		cout << "Unable to open " << filename << endl;
 }
 
+// overladed << operator for vector<State>
+std::ostream& operator << (std::ostream& os, const std::vector<State>& v) 
+{
+    os << endl;
+    for (auto s: v)
+    {
+        os << s << endl;
+    }
+    return os;
+}
 int main()
 {
     /* Vector of States */
@@ -136,14 +146,24 @@ int main()
 
     /* Typing std::vector<int>::iterator is annoying and it doesn’t add much value for a human reading our code, so we often use auto instead, like for the variable p above. 
        The reason for typing the full name in the block above is for the sake of the example.*/
-
     
     /* Range-based for loop. These are all valid ways of writing a loop, albeit with slightly different effects: */
+
+    cout << "---------------------------------------------" << endl;
+    cout << "- Insert some data to the state_vector -----" << endl;
+
 
     /* We first insert some data to the state_vector.*/
     state_vector.push_back (State("\"Washington\"", "\"WA\""));
     state_vector.push_back (State("\"Idaho\"", "\"ID\""));
     state_vector.push_back (State("\"California\"", "\"CA\""));
+    state_vector.push_back (State("\"Oregon\"", "\"OR\""));
+
+    /* We also insert a State object to the mid index of the vector. */
+    vector<State>::iterator it = state_vector.begin() + (state_vector.size()/2);  
+    state_vector.insert(it, State("\"BEST STATE\"", "\"BS\""));
+    cout << state_vector ;
+
     cout << "---------------------------------------------" << endl;
     cout << "- Updating state names and abbreviations-----" << endl;
 
@@ -152,17 +172,13 @@ int main()
     // without affecting the vector.
     for (State s : state_vector) {
         s.setName("\"State\"");
-        cout << s << endl;
     }
     for (auto s : state_vector) {
         s.setAbbr("\"Abbreviation\"");
-        cout << s << endl;
     }
     cout << "-----------\n-Updated only copies of objects-----" << endl;
-    /* print all elements in the vector*/
-    for (State x : state_vector) {
-        cout << x << endl;
-    }
+    /* print all elements in the vector ; using the operator<< for vector<State>*/
+    cout << state_vector ;
 
     cout << "---------------------------------------------" << endl;
     cout << "- Updating state names and abbreviations-----" << endl;
@@ -170,25 +186,24 @@ int main()
     /* Operate via mutable reference. No copies are made; changes affect the
      contents of the vector.*/
     for (State &s : state_vector) {
-        s.setName("\"State\"");
-        cout << s << endl;
+        if (s.getName() == "\"California\"")
+                s.setAbbr("\"--\"");
     }
-    for (auto &s : state_vector) {
-        s.setAbbr("\"Abbreviation\"");
-        cout << s << endl;
+    for (vector<State>::iterator it = state_vector.begin();  it < state_vector.end(); it++) {
+        if ((*it).getName() == "\"Idaho\"")
+            (*it) = State("\"Neveda\"", "\"NV\"");
     }
 
     cout << "-----------\n-Updated the object values-----" << endl;
     /* print all elements in the vector*/
-    for (State x : state_vector) {
-        cout << x << endl;
-    }
+    cout << state_vector;
 
     cout << "---------------------------------------------" << endl;
     // Operate via const&. No copies needed, and no modifications allowed.
     for (const State &s : state_vector) {
         cout << s << endl;
     }
+    cout << "---------------" << endl;
     for (const auto &s : state_vector) {
         cout << s << endl;
     }
