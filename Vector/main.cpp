@@ -42,6 +42,8 @@ std::ostream& operator << (std::ostream& os, const std::vector<State>& v)
     }
     return os;
 }
+
+
 int main()
 {
     /* Vector of States */
@@ -61,6 +63,7 @@ int main()
     cout << "---------------------------------------------" << endl;
     /* The basic interface of std::vector includes size(), push_back(const T&) method, operator[](size_t i), erase(std::vector<T>::iterator it), and clear() */
     
+
     /*  add 2 states to the vector. */
     state_vector.push_back (State("\"Washington\"", "\"WA\""));
     state_vector.push_back (State("\"West Virginia\"", "\"WV\""));
@@ -97,10 +100,12 @@ int main()
         cout << i << " - " << state_vector[i] << endl;
     }  
     cout << "---------------------------------------------" << endl;
+
     /* Alternative way to iterate over elements using range-based for loop and iterators
        The iterator methods enable you to use the range-based for loop. 
        The following code uses the range-based for loop to print the same thing as above. 
-       Note the difference: instead of an index size_t i going from 0 to v.size() - 1, the new code directly pulls values int x out of the vector. */
+       Note the difference: instead of an index size_t i going from 0 to v.size() - 1, 
+       the new code directly pulls values int x out of the vector. */
     for (State x : state_vector) {
         cout << x << endl;
     }
@@ -136,7 +141,7 @@ int main()
     vector<int> my_vec = {1, 4, 9, 16, 25};
     vector<int>::iterator begin = my_vec.begin();  // points at 1
     vector<int>::iterator end = begin + 5;         // one-past-the-end
-    for (auto p = begin; p != end; p++) {
+    for (vector<int>::iterator p = begin; p != end; p++) {
         cout << *p << endl;
     }  // prints 1, 4, 9, 16, 25 (on separate lines)
 
@@ -171,10 +176,10 @@ int main()
     // slower, but it allows you to safely modify the loop variable s
     // without affecting the vector.
     for (State s : state_vector) {
-        s.setName("\"State\"");
+        s.setName("\"---\"");
     }
     for (auto s : state_vector) {
-        s.setAbbr("\"Abbreviation\"");
+        s.setAbbr("\"****\"");
     }
     cout << "-----------\n-Updated only copies of objects-----" << endl;
     /* print all elements in the vector ; using the operator<< for vector<State>*/
@@ -191,7 +196,7 @@ int main()
     }
     for (vector<State>::iterator it = state_vector.begin();  it < state_vector.end(); it++) {
         if ((*it).getName() == "\"Idaho\"")
-            (*it) = State("\"Neveda\"", "\"NV\"");
+            (*it) = State("\"Nevada\"", "\"NV\"");
     }
 
     cout << "-----------\n-Updated the object values-----" << endl;

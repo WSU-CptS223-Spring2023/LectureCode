@@ -1,6 +1,6 @@
 #include "testdata.hpp"
 
-// Returns the vector with max size in the given 2 dimensional vector, 
+// Returns the vector with max size in the given nested vector, 
 // Assume vec includes at least one vector
 svector findMaxSize1(const vector<svector> &vec)
 {
@@ -13,7 +13,7 @@ svector findMaxSize1(const vector<svector> &vec)
     return vec[max_vector];
 }
 
-// Returns the vector with max size in the given 2 dimensional vector, 
+// Returns the vector with max size in the given nested vector, 
 // Assume vec includes at least one vector
 svector & findMaxSize2( vector<svector> &vec)
 {
@@ -102,7 +102,7 @@ int main()
     cout << "After third for loop: "<< arr << endl;
 
 // --------------------------------------------------------
-// lvalue references use #2 ; avoiding a copy
+// lvalue references use #3 ; avoiding a copy
 
     //Assume big_data vector stores large objects (i.e., svector objects are large)
 

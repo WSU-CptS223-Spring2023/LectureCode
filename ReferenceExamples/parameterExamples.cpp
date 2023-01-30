@@ -19,7 +19,7 @@ void swap2( int &x, int &y)
 
 // x and y are passed by reference
 // swapping by three copies
-void swap( vector<string> & x, vector<string> & y )
+void swap3( vector<string> & x, vector<string> & y )
 {
     vector<string> tmp = x;
     x = y;
@@ -36,6 +36,7 @@ string randomItem( const vector<string> & arr ){
 
 // Overloaded function where argument arr is an rvalue. 
 // returns random item in rvalue arr
+// arr is passed by rvalue reference 
 string randomItem( vector<string> && arr ){
     cout << "Called randomItem with rvalue."<<endl;
     return arr[rand() % arr.size()];
@@ -56,7 +57,7 @@ svector findMaxSize1(const vector<svector> &vec)
     return vec[max_vector];
 }
 
-// Returns the vector with max size in the given 2 dimensional vector. Assume vec includes at least one vector
+// Returns the vector with max size in the given nested vector. Assume vec includes at least one vector
 // vec is passed by constant-reference 
 // returns a reference of max length vector in vec
 svector & findMaxSize2( vector<svector> &vec)
@@ -69,7 +70,7 @@ svector & findMaxSize2( vector<svector> &vec)
     return (vec[max_vector]);
 }
 
-// Returns the vector with max size in the given 2 dimensional vector. Assume vec includes at least one vector
+// Returns the vector with max size in the given nested vector. Assume vec includes at least one vector
 // vec is passed by constant-reference 
 // returns a constant reference of max length vector in vec
 const svector & findMaxSize3( const vector<svector> &vec)

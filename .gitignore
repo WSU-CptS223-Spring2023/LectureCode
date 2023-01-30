@@ -30,7 +30,5 @@
 *.exe
 *.out
 *.app
-
-# VSCode
-.vscode
-.vs
+examples1
+examples2
