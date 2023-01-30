@@ -13,8 +13,8 @@ clean:
 debug: 
 	gdb lvalue 
 
-examples1:
+run1:
 	@./examples1 
 
-examples2:
+run2:
 	@./examples2 
