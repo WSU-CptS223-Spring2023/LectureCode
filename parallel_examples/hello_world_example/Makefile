@@ -5,4 +5,4 @@ clean:
 	-rm omp_hello
 
 run:
-	@./omp_hello 10
+	@./omp_hello

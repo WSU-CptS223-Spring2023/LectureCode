@@ -1,8 +1,8 @@
-/* File:     omp_sum.cpp
+/* File:     omp_sum_ver3.cpp
  *
  * Purpose:  A parallel solution that sums all values in an array; uses OpenMP
  *
- * Compile:  g++ -g -Wall -fopenmp -o omp_sum omp_sum.cpp
+ * Compile:  g++ -g -Wall -fopenmp -o omp_sum omp_sum_ver3.cpp
  * Run:      ./omp_sum
  * 
  * Input:    none
