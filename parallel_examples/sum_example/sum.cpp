@@ -21,36 +21,32 @@
 //                would be helpful.
 
 #include <iostream>
-
-int *create_array (int num);
-int sum_array (int *pIntegers, int num_elements);
+#include <stdlib.h>
+#include <omp.h>
+#define MAX 1000000
 
 int main (int argc, char *argv[])
 {
+    // computational intensive loops
+    // find the compute intensive loops
+    int j = 0, numbers[MAX];
+    
+    for (int i = 0; i < MAX; ++i) {
+            j += 1; 
+            numbers[i] = j;
+        }
+    
+    long int sum = 0;
+    
+    double start_time = omp_get_wtime ();
+    for (int i = 0; i < MAX; ++i) {
+           sum = sum + numbers[i];
+    } 
 
+    double end_time = omp_get_wtime();
+
+    std::cout << "time: " << end_time - start_time  << std::endl;
+    std::cout << "sum: " << sum << std::endl;
 
     return 0;
-}
-
-
-int *create_array (int num)
-{
-    return new int[num];
-}
-
-int sum_array (int *pIntegers, int num_elements)
-{
-    int sum = 0;
-    // how could parallelization help here?
-    // we could have separate threads run
-    // the for () loop on differents chunks
-    // of the same array. If we have 4 threads,
-    // we could have each thread run the loop
-    // on 1/4 of the elements in the array.
-    for (int index; index < num_elements; ++index)
-    {
-        sum += pIntegers[index];
-    }
-
-    return sum;
 }

@@ -35,11 +35,13 @@ int main (int argc, char *argv[])
     long int sum = 0;
     
     double start_time = omp_get_wtime ();
+
     for (int i = 0; i < MAX; ++i) {
            sum = sum + numbers[i];
     } 
+
     double end_time = omp_get_wtime();
-    
+
     std::cout << "time: " << end_time - start_time  << std::endl;
     std::cout << "sum: " << sum << std::endl;
 
