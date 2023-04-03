@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     omp_set_num_threads (NUM_THREADS);
     double start_time = omp_get_wtime (); // get current wall clock time
 
-// The private clause specifies that for each variable listed inside the parantheses, 
+// The private clause specifies that for each variable listed inside the parentheses, 
 // a private copy is to be created for each thread
 #  pragma omp parallel for reduction(+: sum) private(factor)
    for (i = 0; i < n; i++) {
