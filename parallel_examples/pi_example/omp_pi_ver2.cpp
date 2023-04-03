@@ -1,90 +1,53 @@
 /* File:     omp_pi_ver2.cpp
+ * Purpose:  Estimate pi using OpenMP and the formula - parallel solution
+         
  *
- * Purpose:  A parallel solution that calculates pi; uses OpenMP
+ *              pi = 4*[1 - 1/3 + 1/5 - 1/7 + 1/9 - . . . ]
  *
- * Compile:  g++ -g -Wall -fopenmp -o omp_pi omp_pi_ver2.cpp
- * Run:      ./omp_pi
- * 
- * Input:    none
- * Output:   Time to calculate the partial sums, and the calculated pi value
- *
- */
+ * Compile:  	g++ -g -Wall -fopenmp -o omp_pi omp_pi_ver2.cpp
 
-// CptS 223 - What happens to the time required to
-// run these programs when NUM_THREADS is set to 1, then 2,
-// then up to the max cores on your system? The time should
-// decrease as you increase your NUM_THREADS. Does this happen?
-
-// Remember OpenMP is a multi-threading, shared address model
+ *
+ * Notes:
+ *    1.  The radius of convergence is only 1.  So the series converges
+ *        *very* slowly.
+ *    2. factor is now a private variable and pi calculation is now robust. 
+ */        
 
 #include <iostream>
 #include <stdlib.h>
-#include <omp.h>
-
-static long num_steps = 100000000; // change this number to test
-double step;
+#include <math.h>
+#include <omp.h> 
 
 #define NUM_THREADS 2 // change this number to test
-#define MAX 10000
+#define STEPS 100000000
 
+int main(int argc, char* argv[]) {
+   long long n, i;
+   double factor;
+   double sum = 0.0;
 
-// shows how to work with a critical region
-int main (int argc, char *argv[])
-{
-    int i = 0, nthreads = 0;
-    double pi = 0.0; // sum[NUM_THREADS] = {0.0};
-
-    step = 1.0/(double)num_steps;
+   n = STEPS;
 
     omp_set_num_threads (NUM_THREADS);
-    double time = omp_get_wtime (); // get current wall clock time
+    double start_time = omp_get_wtime (); // get current wall clock time
 
-    // going into this parallel region
-    #pragma omp parallel
-    {
-        int i = 0, id = 0, nthrds = 0;
-        double x = 0.0, sum = 0.0; // sum is no longer shared
-                                 // it's on stack, each thread has own copy
+// The private clause specifies that for each variable listed inside the parantheses, 
+// a private copy is to be created for each thread
+#  pragma omp parallel for reduction(+: sum) private(factor)
+   for (i = 0; i < n; i++) {
+      factor = (i % 2 == 0) ? 1.0 : -1.0;   // factor is now a private variable and it's value doesn't depend on previous value
+      sum += factor/(2*i+1);
+   }
+   
+   double end_time = omp_get_wtime (); 
 
-        id = omp_get_thread_num(); // which thread is running
-        nthrds = omp_get_num_threads (); // may not match,
-                                         // the number requested
-
-        if(id == 0) 
-        {
-            nthreads = nthrds;
-        }
-
-        // the code 
-        for ( i = id, sum = 0.0; 
-              i < num_steps; 
-              i = i + nthrds)
-        {
-            x = (i + 0.5) * step;
-            // false sharing does not happen here
-            sum += 4.0 / (1.0 + x * x);
-        }
-
-        // let's move pi into parallel regions; remember since it's declared outside parallel region
-        // it's shared between all threads - we need to protect it from being read and updated  asynchronously. 
-        // we do this by adding a critical section, which enforces mutual exclusion.
-        // this means only one thread can execute the critical section at a time. 
-        // note: we also don't want to place this pi update in the above loop with the critical around it; slows down performance
-        #pragma omp critical
-        {
-            pi += sum * step;
-        }
-    }
-    std::cout << "time: " << omp_get_wtime () - time << \
-    " seconds to run parallel region." << std::endl;
-    // add the partial sums outside the parallel region
-    //for (i = 0, pi = 0.0; i < nthreads; i++) 
-    //{
-      //  pi += sum[i] * step;
-    //}
-
-    std::cout << "pi: " << pi << std::endl;
-
-    return 0;
-}
+   sum = 4.0*sum;
+   std::cout << "   With n = " << n << " terms and " << NUM_THREADS << " threads" << std::endl;
+   std::cout.precision(14);
+   std::cout << "   Our estimate of pi = " << sum << std::endl;
+   std::cout.precision(14);
+   std::cout << "                   pi = " << 4.0*atan(1.0) << std::endl;
+   std::cout << "   Time: " << end_time - start_time << " seconds to run parallel region." << std::endl;
+   return 0;
+}  /* main */
 

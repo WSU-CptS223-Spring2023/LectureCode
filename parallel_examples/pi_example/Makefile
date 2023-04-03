@@ -1,5 +1,5 @@
 prog: 
-	g++ -g -Wall -fopenmp -o omp_pi omp_pi_ver2.cpp
+	g++ -g -Wall -fopenmp -o omp_pi omp_pi_ver1.cpp
 
 clean:
 	-rm omp_pi
